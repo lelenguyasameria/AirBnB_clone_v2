@@ -11,6 +11,25 @@ from models.city import City
 from models.amenity import Amenity
 from models.review import Review
 
+def process(string):
+    start = 0
+    list_m = []
+    if ' ' in string:
+        list_m = string.split()
+    else:
+        list_m = string
+    types = HBNBCommand.types
+    n_dict = {}
+    for i in list_m:
+        n_list = i.split('=')
+        if n_list[1][0] == '"':
+            n_list[1] = n_list[1][1:-1]
+        if n_list[0] in types.keys():
+            n_dict[n_list[0]] = types[n_list[0]](n_list[1])
+        else:
+            n_dict[n_list[0]] = n_list[1]
+    return n_dict
+
 
 class HBNBCommand(cmd.Cmd):
     """ Contains the functionality for the HBNB console"""
@@ -118,10 +137,18 @@ class HBNBCommand(cmd.Cmd):
         if not args:
             print("** class name missing **")
             return
+        elif '=' in args:
+            name = args.split()[0]
+            args = args[len(name) + 1:]
+            flag = 1
+            args = process(args)
         elif args not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-        new_instance = HBNBCommand.classes[args]()
+        if flag:
+            new_instance = HBNBCommand.classes[name](**args)
+        else:
+            new_instance = HBNBCommand.classes[args]()
         storage.save()
         print(new_instance.id)
         storage.save()
