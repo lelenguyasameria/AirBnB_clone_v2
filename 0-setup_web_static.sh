@@ -17,7 +17,7 @@ echo "<html><head></head><body>Test Page</body></html>" | sudo tee /data/web_sta
 sudo ln -sf /data/web_static/releases/test/ /data/web_static/current
 
 # Set ownership recursively to the ubuntu user and group
-sudo chown -R lelenguya:lelenguya /data/
+sudo chown -R ubuntu:ubuntu /data/
 
 # Update Nginx configuration
 nginx_config="/etc/nginx/sites-available/default"
