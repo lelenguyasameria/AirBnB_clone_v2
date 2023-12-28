@@ -7,9 +7,6 @@ from fabric import task
 from datetime import datetime
 import os
 
-# Define timestamp as a global variable
-timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
-
 @task
 def do_pack(c):
     """
@@ -23,7 +20,8 @@ def do_pack(c):
         # Create the "versions" folder if it doesn't exist
         c.run("mkdir -p versions")
 
-        # Generate archive filename using current timestamp
+        # Generate archive filename using the current timestamp
+        timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
         archive_name = "web_static_{}.tgz".format(timestamp)
 
         # Create the .tgz archive
@@ -39,6 +37,7 @@ def do_pack(c):
 def deploy(c):
     """
     Deploys the web_static content to the servers.
+
     """
     archive_path = do_pack(c)
     if archive_path:
@@ -52,6 +51,4 @@ def deploy(c):
         # Create a symbolic link
         c.run("rm -rf /data/web_static/current")
         c.run("ln -s /data/web_static/releases/{} /data/web_static/current".format(timestamp))
-
-# Ensure this script is executable
 
