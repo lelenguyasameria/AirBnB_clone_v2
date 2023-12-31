@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 '''A simple Flask web application.
 '''
-from flask import Flask
+from flask import Flask, render_template
 
 
 app = Flask(__name__)
@@ -38,6 +38,15 @@ def python_page(text):
 def number_page(n):
     '''The number page.'''
     return '{} is a number'.format(n)
+
+
+@app.route('/number_template/<int:n>')
+def number_template(n):
+    '''The number_template page.'''
+    ctxt = {
+        'n': n
+    }
+    return render_template('5-number.html', **ctxt)
 
 
 if __name__ == '__main__':
