@@ -25,6 +25,20 @@ class FileStorage:
                 temp[key] = val.to_dict()
             json.dump(temp, f)
 
+
+    def reload(self):
+        """Deserializes the JSON file to __objects"""
+        try:
+            with open(FileStorage.__file_path, 'r', encoding='utf-8') as file:
+                data = json.load(file)
+                for key, value in data.items():
+                    cls_name, obj_id = key.split('.')
+                    obj = eval(cls_name)(**value)
+                    FileStorage.__objects[key] = obj
+        except FileNotFoundError:
+            pass
+
+
     def reload(self):
         """Loads storage dictionary from file"""
         from models.base_model import BaseModel
